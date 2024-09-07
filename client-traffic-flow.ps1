@@ -246,16 +246,18 @@ function FindProxyForURL(url, host) {
         $script:wpad:4 = @"
     // set proxy to proxyserver
     proxy = ProxyServer;
+    
+    
         
 "@
 
         $script:wpad:5 = @"
     
     if (isPlainHostName(host) || // bypass proxy if non fqdn
-        isInNet(myip, "127.0.0.0", "255.0.0.0") ||      // bypass proxy if localhost network
-        isInNet(myip, "10.0.0.0", "255.0.0.0") ||       // bypass proxy if private subnet 10.0.0.0/8
-        isInNet(myip, "172.16.0.0", "255.240.0.0") ||   // bypass proxy if Private subnet 172.16.0.0/12
-        isInNet(myip, "192.168.0.0", "255.255.0.0"))    // bypass proxy if Private subnet 192.168.0.0/16
+        isInNet(host, "127.0.0.0", "255.0.0.0") ||      // bypass proxy if localhost network
+        isInNet(host, "10.0.0.0", "255.0.0.0") ||       // bypass proxy if private subnet 10.0.0.0/8
+        isInNet(host, "172.16.0.0", "255.240.0.0") ||   // bypass proxy if Private subnet 172.16.0.0/12
+        isInNet(host, "192.168.0.0", "255.255.0.0"))    // bypass proxy if Private subnet 192.168.0.0/16
     {
         return "DIRECT"; // Bypass proxy for plain hostnames, loopback, and private subnets
     }
@@ -271,7 +273,7 @@ $script:wpad:6 = "`tif `n`t(" # Start of the if block
         # Remove the last ' || ' and add the final condition
         $script:wpad:6 = $script:wpad:6.TrimEnd(" ||")
         $script:wpad:6 += "`n`t) `n`t{`n"
-        $script:wpad:6 += "`t`treturn `DIRECT`; // Bypass proxy for domains`n" # Add a tab indent for the return statement
+        $script:wpad:6 += "`t`treturn `"DIRECT`"`; // Bypass proxy for domains`n" # Add a tab indent for the return statement
         $script:wpad:6 += "`t}`n" # Closing brace on its own line
 
 
@@ -289,18 +291,17 @@ $script:wpad:6 = "`tif `n`t(" # Start of the if block
                 $mask = Convert-CIDRToNetmask -cidr $ipRange
             }
 
-            $script:wpad:7 += "`n`t`tisInNet(myip, `"$ip`", `"$mask`") ||" # Add each condition on a new line with tab indentation
+            $script:wpad:7 += "`n`t`tisInNet(host, `"$ip`", `"$mask`") ||" # Add each condition on a new line with tab indentation
         }
 
         # Remove the last ' || ' and add the final condition
         $script:wpad:7 = $script:wpad:7.TrimEnd(" ||")
         $script:wpad:7 += "`n`t)`n"
         $script:wpad:7 += " `t{`n"
-        $script:wpad:7 += "`t`treturn `DIRECT`; // Bypass proxy for IP ranges or addresses`n" # Add a tab indent for the return statement
+        $script:wpad:7 += "`t`treturn `"DIRECT`"`; // Bypass proxy for IP ranges or addresses`n" # Add a tab indent for the return statement
         #$script:wpad:7 += "`}`n" # Closing brace on its own line
 
         # Output the WPAD content
-        $script:wpad:7 | Out-File -FilePath "proxy.pac" -Encoding utf8
 
         $script:wpad:7 += "`t}`n"
 
