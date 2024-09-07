@@ -17,6 +17,23 @@ Function Invoke-ProxyBuilder {
     begin {
     
         
+        function Convert-CIDRToNetmask {
+            param (
+                [string]$cidr
+            )
+        
+            if ($cidr -match "^(\d+\.\d+\.\d+\.\d+)$") {
+                # Single IP address, treat as /32
+                return "255.255.255.255"
+            } elseif ($cidr -match "^(\d+\.\d+\.\d+\.\d+)/(\d+)$") {
+                # CIDR format
+                $prefix = [int]$matches[2]
+                $mask = [math]::Pow(2, 32) - [math]::Pow(2, 32 - $prefix)
+                $mask = [string]::Format("{0}.{1}.{2}.{3}", ($mask -band 0xFF000000) -shr 24, ($mask -band 0x00FF0000) -shr 16, ($mask -band 0x0000FF00) -shr 8, $mask -band 0x000000FF)
+                return $mask
+            }
+        }
+
         
         # Declare Folder Variables
         $Script:Directories = [PSCustomObject]([ordered]@{
@@ -244,6 +261,48 @@ function FindProxyForURL(url, host) {
     }
 
 "@
+# Initialize the WPAD content variable
+$script:wpad:6 = "`tif `n`t(" # Start of the if block
+
+        foreach ($domain in $script:domains_distinct) {
+            $script:wpad:6 += "`n`t`tshExpMatch(host, `"$domain`") ||" # Add each condition on a new line with tab indentation
+        }
+
+        # Remove the last ' || ' and add the final condition
+        $script:wpad:6 = $script:wpad:6.TrimEnd(" ||")
+        $script:wpad:6 += "`n`t) `n`t{`n"
+        $script:wpad:6 += "`t`treturn `DIRECT`; // Bypass proxy for domains`n" # Add a tab indent for the return statement
+        $script:wpad:6 += "`t}`n" # Closing brace on its own line
+
+
+        $script:wpad:7 = "`tif `n`t(" # Start of the if block
+
+        foreach ($ipRange in $script:ipv4address_distinct) {
+            if ($ipRange -match "^(\d+\.\d+\.\d+\.\d+)/(\d+)$") {
+                # CIDR range
+                $ip = $matches[1]
+                $cidr = [int]$matches[2]
+                $mask = Convert-CIDRToNetmask -cidr $ipRange
+            } else {
+                # Single IP address
+                $ip = $ipRange
+                $mask = Convert-CIDRToNetmask -cidr $ipRange
+            }
+
+            $script:wpad:7 += "`n`t`tisInNet(myip, `"$ip`", `"$mask`") ||" # Add each condition on a new line with tab indentation
+        }
+
+        # Remove the last ' || ' and add the final condition
+        $script:wpad:7 = $script:wpad:7.TrimEnd(" ||")
+        $script:wpad:7 += "`n`t)`n"
+        $script:wpad:7 += " `t{`n"
+        $script:wpad:7 += "`t`treturn `DIRECT`; // Bypass proxy for IP ranges or addresses`n" # Add a tab indent for the return statement
+        #$script:wpad:7 += "`}`n" # Closing brace on its own line
+
+        # Output the WPAD content
+        $script:wpad:7 | Out-File -FilePath "proxy.pac" -Encoding utf8
+
+        $script:wpad:7 += "`t}`n"
 
 
         $script:wpad:finalize = @"
@@ -259,6 +318,8 @@ function FindProxyForURL(url, host) {
         $script:wpad:3 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
         $script:wpad:4 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
         $script:wpad:5 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        $script:wpad:6 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        $script:wpad:7 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
 
         $script:wpad:finalize | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
         #endregion
@@ -268,6 +329,7 @@ function FindProxyForURL(url, host) {
 
     end 
     {
+        $script:wpad:7
     }
 
 }
