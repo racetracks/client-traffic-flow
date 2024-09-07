@@ -1,0 +1,2 @@
+https://*.events.data.microsoft.com
+https://*.aria.microsoft.com

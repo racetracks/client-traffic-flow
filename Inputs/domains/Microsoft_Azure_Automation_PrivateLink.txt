@@ -1,0 +1,12 @@
+https://<accountId>.webhook.ae.azure-automation.net
+https://<accountId>.agentsvc.ae.azure-automation.net
+https://<accountId>.jrds.ae.azure-automation.net
+https://<accountId>.webhook.ase.azure-automation.net
+https://<accountId>.agentsvc.ase.azure-automation.net
+https://<accountId>.jrds.ase.azure-automation.net
+https://<accountId>.webhook.cbr2.azure-automation.net
+https://<accountId>.agentsvc.cbr2.azure-automation.net
+https://<accountId>.jrds.cbr2.azure-automation.net
+https://<accountId>.webhook.ac.azure-automation.net
+https://<accountId>.agentsvc.ac.azure-automation.net
+https://<accountId>.jrds.ac.azure-automation.net

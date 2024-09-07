@@ -1,0 +1,6 @@
+ac-jobruntimedata-prod-su1.azure-automation.net
+ac-agentservice-prod-1.azure-automation.net
+ae-jobruntimedata-prod-su1.azure-automation.net
+ae-agentservice-prod-1.azure-automation.net
+ase-jobruntimedata-prod-su1.azure-automation.net
+ase-agentservice-prod-1.azure-automation.net

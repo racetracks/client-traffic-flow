@@ -1,0 +1,9 @@
+*.download.microsoft.com
+*.powerbi.com
+*.analysis.windows.net
+*.login.windows.net
+login.live.com, aadcdn.msauth.net
+login.microsoftonline.com
+*.microsoftonline-p.com
+*.core.windows.net
+*.dfs.fabric.microsoft.com

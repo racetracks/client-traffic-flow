@@ -1,0 +1,4 @@
+crl.microsoft.com
+ctldl.windowsupdate.com
+www.microsoft.com/pkiops/*
+www.microsoft.com/pki/*

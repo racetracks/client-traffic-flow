@@ -1,0 +1,16 @@
+https://autodiscover.outlook.com
+https://officecdn.microsoft.com
+https://api.diagnostics.office.com
+https://apibasic.diagnostics.office.com
+https://autodiscover-s.outlook.com
+https://cloudcheckenabler.azurewebsites.net
+https://login.live.com
+https://login.microsoftonline.com
+https://login.windows.net
+https://o365diagtelemetry.trafficmanager.net
+https://odc.officeapps.live.com
+https://offcatedge.azureedge.net
+https://officeapps.live.com
+https://outlook.office365.com
+https://outlookdiagnostics.azureedge.net
+https://sara.api.support.microsoft.com
