@@ -286,7 +286,7 @@ $script:wpad:6 = "`tif `n`t(" # Start of the if block
                 $cidr = [int]$matches[2]
                 $mask = Convert-CIDRToNetmask -cidr $ipRange
             } else {
-                # Single IP address
+                # Single IP addres
                 $ip = $ipRange
                 $mask = Convert-CIDRToNetmask -cidr $ipRange
             }
@@ -299,7 +299,6 @@ $script:wpad:6 = "`tif `n`t(" # Start of the if block
         $script:wpad:7 += "`n`t)`n"
         $script:wpad:7 += " `t{`n"
         $script:wpad:7 += "`t`treturn `"DIRECT`"`; // Bypass proxy for IP ranges or addresses`n" # Add a tab indent for the return statement
-        #$script:wpad:7 += "`}`n" # Closing brace on its own line
 
         # Output the WPAD content
 
