@@ -320,8 +320,8 @@ function FindProxyForURL(url, host) {
         $script:wpad:10 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
         $script:wpad:15 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
         $script:wpad:20 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
-        $script:wpad:6 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
-        $script:wpad:7 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        $script:wpad:30 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        $script:wpad:40 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
 
         $script:wpad:finalize | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
         #endregion
