@@ -254,55 +254,51 @@ function FindProxyForURL(url, host) {
 "@
 
         $script:wpad:20 = @"
-    
+    var resolved_ip = dnsResolve(host);
     if (isPlainHostName(host) || // bypass proxy if non fqdn
-        isInNet(host, "127.0.0.0", "255.0.0.0") ||      // bypass proxy if localhost network
-        isInNet(host, "10.0.0.0", "255.0.0.0") ||       // bypass proxy if private subnet 10.0.0.0/8
-        isInNet(host, "172.16.0.0", "255.240.0.0") ||   // bypass proxy if Private subnet 172.16.0.0/12
-        isInNet(host, "192.168.0.0", "255.255.0.0"))    // bypass proxy if Private subnet 192.168.0.0/16
+        isInNet(resolved_ip, "127.0.0.0", "255.0.0.0") ||      // bypass proxy if localhost network
+        isInNet(resolved_ip, "10.0.0.0", "255.0.0.0") ||       // bypass proxy if private subnet 10.0.0.0/8
+        isInNet(resolved_ip, "172.16.0.0", "255.240.0.0") ||   // bypass proxy if Private subnet 172.16.0.0/12
+        isInNet(resolved_ip, "192.168.0.0", "255.255.0.0"))    // bypass proxy if Private subnet 192.168.0.0/16
     {
         return "DIRECT"; // Bypass proxy for plain hostnames, loopback, and private subnets
     }
 
 "@
         # Initialize the WPAD content variable
-        $script:wpad:30 = "`tif `n`t(" # Start of the if block
+        $script:wpad:30 = "`tif `n`t(" 
 
         foreach ($domain in $script:domains_distinct) {
-            $script:wpad:30 += "`n`t`tshExpMatch(host, `"$domain`") ||" # Add each condition on a new line with tab indentation
+            $script:wpad:30 += "`n`t`tshExpMatch(host, `"$domain`") ||"
         }
 
         # Remove the last ' || ' and add the final condition
-        $script:wpad:30 = $script:wpad:6.TrimEnd(" ||")
+        $script:wpad:30 = $script:wpad:30.TrimEnd(" ||")
         $script:wpad:30 += "`n`t) `n`t{`n"
-        $script:wpad:30 += "`t`treturn `"DIRECT`"`; // Bypass proxy for domains`n" # Add a tab indent for the return statement
-        $script:wpad:30 += "`t}`n" # Closing brace on its own line
+        $script:wpad:30 += "`t`treturn `"DIRECT`"`; // Bypass proxy for domains`n"
+        $script:wpad:30 += "`t}`n"
 
 
         $script:wpad:40 = "`tif `n`t(" # Start of the if block
 
         foreach ($ipRange in $script:ipv4address_distinct) {
             if ($ipRange -match "^(\d+\.\d+\.\d+\.\d+)/(\d+)$") {
-                # CIDR range
                 $ip = $matches[1]
                 $cidr = [int]$matches[2]
                 $mask = Convert-CIDRToNetmask -cidr $ipRange
             } else {
-                # Single IP addres
                 $ip = $ipRange
                 $mask = Convert-CIDRToNetmask -cidr $ipRange
             }
 
-            $script:wpad:40 += "`n`t`tisInNet(host, `"$ip`", `"$mask`") ||" # Add each condition on a new line with tab indentation
+            $script:wpad:40 += "`n`t`tisInNet(resolved_ip, `"$ip`", `"$mask`") ||" # Add each condition on a new line with tab indentation
         }
 
-        # Remove the last ' || ' and add the final condition
-        $script:wpad:40 = $script:wpad:7.TrimEnd(" ||")
+        $script:wpad:40 = $script:wpad:40.TrimEnd(" ||")
         $script:wpad:40 += "`n`t)`n"
         $script:wpad:40 += " `t{`n"
         $script:wpad:40 += "`t`treturn `"DIRECT`"`; // Bypass proxy for IP ranges or addresses`n" # Add a tab indent for the return statement
 
-        # Output the WPAD content
 
         $script:wpad:40 += "`t}`n"
 
@@ -331,7 +327,6 @@ function FindProxyForURL(url, host) {
 
     end 
     {
-        $script:wpad:7
     }
 
 }

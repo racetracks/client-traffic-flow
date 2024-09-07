@@ -1,0 +1,840 @@
+function FindProxyForURL(url, host) {
+
+    // declare proxy server
+    var ProxyServer = "PROXY abc.com:3129";
+
+    // set current clients ip address to variable myip
+    var myip = myIpAddress();
+
+    // create variable "proxy"
+    var proxy;
+
+    // set proxy to proxyserver
+    proxy = ProxyServer;
+    
+    
+        
+    var resolved_ip = dnsResolve(host);
+    if (isPlainHostName(host) || // bypass proxy if non fqdn
+        isInNet(resolved_ip, "127.0.0.0", "255.0.0.0") ||      // bypass proxy if localhost network
+        isInNet(resolved_ip, "10.0.0.0", "255.0.0.0") ||       // bypass proxy if private subnet 10.0.0.0/8
+        isInNet(resolved_ip, "172.16.0.0", "255.240.0.0") ||   // bypass proxy if Private subnet 172.16.0.0/12
+        isInNet(resolved_ip, "192.168.0.0", "255.255.0.0"))    // bypass proxy if Private subnet 192.168.0.0/16
+    {
+        return "DIRECT"; // Bypass proxy for plain hostnames, loopback, and private subnets
+    }
+
+	if 
+	(
+		shExpMatch(host, "yammerusercontent.com") ||
+		shExpMatch(host, "yammer.com") ||
+		shExpMatch(host, "x.cp.wd.microsoft.com") ||
+		shExpMatch(host, "www.telecommandsvc.microsoft.com") ||
+		shExpMatch(host, "www.sway.com") ||
+		shExpMatch(host, "www.outlook.com") ||
+		shExpMatch(host, "www.onedrive.live.com") ||
+		shExpMatch(host, "www.onedrive.com") ||
+		shExpMatch(host, "www.office.com") ||
+		shExpMatch(host, "www.msn.com") ||
+		shExpMatch(host, "www.msftconnecttest.com") ||
+		shExpMatch(host, "www.microsoft365.com") ||
+		shExpMatch(host, "www.microsoft.com") ||
+		shExpMatch(host, "www.digicert.com") ||
+		shExpMatch(host, "www.bing.com") ||
+		shExpMatch(host, "www.acompli.com") ||
+		shExpMatch(host, "wustat.windows.com") ||
+		shExpMatch(host, "wus-www.sway-extensions.com") ||
+		shExpMatch(host, "wus-www.sway-cdn.com") ||
+		shExpMatch(host, "wus-firstpartyapps.oaspapps.com") ||
+		shExpMatch(host, "wsusg1virginiaff4.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "wsusg1virginiaff0.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "wsusg1texasff4.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "wsusg1texasff0.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "wsusd1eastff5.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "wsusd1centralff5.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "wsus2westprod.blob.core.windows.net") ||
+		shExpMatch(host, "wsus2eastprod.blob.core.windows.net") ||
+		shExpMatch(host, "wsus1westprod.blob.core.windows.net") ||
+		shExpMatch(host, "wsus1eastprod.blob.core.windows.net") ||
+		shExpMatch(host, "wsuk1westprod.blob.core.windows.net") ||
+		shExpMatch(host, "wsuk1southprod.blob.core.windows.net") ||
+		shExpMatch(host, "wseu1westprod.blob.core.windows.net") ||
+		shExpMatch(host, "wseu1northprod.blob.core.windows.net") ||
+		shExpMatch(host, "wns.windows.com") ||
+		shExpMatch(host, "windowsupdate.microsoft.com") ||
+		shExpMatch(host, "windowsupdate.com") ||
+		shExpMatch(host, "windowsphone.com") ||
+		shExpMatch(host, "windows.msn.com") ||
+		shExpMatch(host, "winatp-gw-weu3.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-weu.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-usmv.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-usmt.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-usgv.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-usgt.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-ukw.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-uks.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-neu3.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-neu.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-eus3.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-eus.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-cus3.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-cus.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-aus.microsoft.com") ||
+		shExpMatch(host, "winatp-gw-aue.microsoft.com") ||
+		shExpMatch(host, "widgetservice.azurefd.net") ||
+		shExpMatch(host, "widgetcdn.azureedge.net") ||
+		shExpMatch(host, "webpubsub.azure.com") ||
+		shExpMatch(host, "weathermapdata.blob.core.windows.net") ||
+		shExpMatch(host, "wdcp.microsoft.com") ||
+		shExpMatch(host, "wd.microsoft.com") ||
+		shExpMatch(host, "wcpstatic.microsoft.com") ||
+		shExpMatch(host, "vstsagentpackage.azureedge.net") ||
+		shExpMatch(host, "vsrm.dev.azure.com") ||
+		shExpMatch(host, "vortex-win.data.microsoft.com") ||
+		shExpMatch(host, "visualstudio.com") ||
+		shExpMatch(host, "virtualearth.net") ||
+		shExpMatch(host, "verisign.net") ||
+		shExpMatch(host, "verisign.com") ||
+		shExpMatch(host, "v10.events.data.microsoft.com") ||
+		shExpMatch(host, "ussusg2virginiaff4.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussusg2virginiaff0.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussusg2texasff4.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussusg2texasff0.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussusg1virginiaff4.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussusg1virginiaff0.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussusg1texasff4.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussusg1texasff0.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussusd2eastff5.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussusd2centralff5.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussusd1eastff5.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussusd1centralff5.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "ussus4westprod.blob.core.windows.net") ||
+		shExpMatch(host, "ussus4eastprod.blob.core.windows.net") ||
+		shExpMatch(host, "ussus3westprod.blob.core.windows.net") ||
+		shExpMatch(host, "ussus3eastprod.blob.core.windows.net") ||
+		shExpMatch(host, "ussus2westprod.blob.core.windows.net") ||
+		shExpMatch(host, "ussus2eastprod.blob.core.windows.net") ||
+		shExpMatch(host, "ussus1westprod.blob.core.windows.net") ||
+		shExpMatch(host, "ussus1eastprod.blob.core.windows.net") ||
+		shExpMatch(host, "ussuk1westprod.blob.core.windows.net") ||
+		shExpMatch(host, "ussuk1southprod.blob.core.windows.net") ||
+		shExpMatch(host, "usseu1westprod.blob.core.windows.net") ||
+		shExpMatch(host, "usseu1northprod.blob.core.windows.net") ||
+		shExpMatch(host, "ussau1southeastprod.blob.core.windows.net") ||
+		shExpMatch(host, "ussau1eastprod.blob.core.windows.net") ||
+		shExpMatch(host, "users.storage.live.com") ||
+		shExpMatch(host, "usercontent.microsoft") ||
+		shExpMatch(host, "us4-v20.events.data.microsoft.com") ||
+		shExpMatch(host, "us.vortex-win.data.microsoft.com") ||
+		shExpMatch(host, "us-v20.events.data.microsoft.com") ||
+		shExpMatch(host, "urs.microsoft.com") ||
+		shExpMatch(host, "update.microsoft.com") ||
+		shExpMatch(host, "unitedstates4.x.cp.wd.microsoft.us") ||
+		shExpMatch(host, "unitedstates4.ss.wd.microsoft.us") ||
+		shExpMatch(host, "unitedstates4.cp.wd.microsoft.us") ||
+		shExpMatch(host, "unitedstates2.x.cp.wd.microsoft.us") ||
+		shExpMatch(host, "unitedstates2.ss.wd.microsoft.us") ||
+		shExpMatch(host, "unitedstates2.cp.wd.microsoft.us") ||
+		shExpMatch(host, "unitedstates1.x.cp.wd.microsoft.us") ||
+		shExpMatch(host, "unitedstates1.ss.wd.microsoft.us") ||
+		shExpMatch(host, "unitedstates1.cp.wd.microsoft.us") ||
+		shExpMatch(host, "unitedstates.x.cp.wd.microsoft.com") ||
+		shExpMatch(host, "unitedkingdom.x.cp.wd.microsoft.com") ||
+		shExpMatch(host, "uk.vortex-win.data.microsoft.com") ||
+		shExpMatch(host, "uk-v20.events.data.microsoft.com") ||
+		shExpMatch(host, "tsfe.trafficshaping.dsp.mp.microsoft.com") ||
+		shExpMatch(host, "tse1.mm.bing.net") ||
+		shExpMatch(host, "trouter.teams.microsoft.com") ||
+		shExpMatch(host, "trouter.skype.com") ||
+		shExpMatch(host, "trouter.communication.microsoft.com") ||
+		shExpMatch(host, "to-do.microsoft.com") ||
+		shExpMatch(host, "time.windows.com") ||
+		shExpMatch(host, "tile-service.weather.microsoft.com") ||
+		shExpMatch(host, "th.bing.com") ||
+		shExpMatch(host, "telemetryservice.firstpartyapps.oaspapps.com") ||
+		shExpMatch(host, "telecommandstorageprod.blob.core.windows.net") ||
+		shExpMatch(host, "telecommand.telemetry.microsoft.com") ||
+		shExpMatch(host, "technet.microsoft.com") ||
+		shExpMatch(host, "teams.microsoft.com") ||
+		shExpMatch(host, "teams.live.com") ||
+		shExpMatch(host, "teams.events.data.microsoft.com") ||
+		shExpMatch(host, "symcd.com") ||
+		shExpMatch(host, "symcb.com") ||
+		shExpMatch(host, "swdin02-mscdn.azureedge.net") ||
+		shExpMatch(host, "swdin01-mscdn.azureedge.net") ||
+		shExpMatch(host, "swdd02-mscdn.azureedge.net") ||
+		shExpMatch(host, "swdd01-mscdn.azureedge.net") ||
+		shExpMatch(host, "swdc02-mscdn.azureedge.net") ||
+		shExpMatch(host, "swdc01-mscdn.azureedge.net") ||
+		shExpMatch(host, "swdb02-mscdn.azureedge.net") ||
+		shExpMatch(host, "swdb01-mscdn.azureedge.net") ||
+		shExpMatch(host, "swda02-mscdn.azureedge.net") ||
+		shExpMatch(host, "swda01-mscdn.azureedge.net") ||
+		shExpMatch(host, "sway.com") ||
+		shExpMatch(host, "svc.ms") ||
+		shExpMatch(host, "support.services.microsoft.com") ||
+		shExpMatch(host, "support.microsoft.com") ||
+		shExpMatch(host, "streaming.mediaservices.windows.net") ||
+		shExpMatch(host, "storeedgefd.dsx.mp.microsoft.com") ||
+		shExpMatch(host, "storecatalogrevocation.storequality.microsoft.com") ||
+		shExpMatch(host, "storage.live.com") ||
+		shExpMatch(host, "staticview.msn.com") ||
+		shExpMatch(host, "statics.teams.cdn.live.net") ||
+		shExpMatch(host, "static2.sharepointonline.com") ||
+		shExpMatch(host, "static.microsoft") ||
+		shExpMatch(host, "staging.to-do.microsoft.com") ||
+		shExpMatch(host, "staffhubweb.azureedge.net") ||
+		shExpMatch(host, "staffhub.ms") ||
+		shExpMatch(host, "ssw.live.com") ||
+		shExpMatch(host, "srtb.msn.com") ||
+		shExpMatch(host, "spoprod-a.akamaihd.net") ||
+		shExpMatch(host, "smtp.office365.com") ||
+		shExpMatch(host, "smartscreen.microsoft.com") ||
+		shExpMatch(host, "smartscreen-prod.microsoft.com") ||
+		shExpMatch(host, "skype.com") ||
+		shExpMatch(host, "signup.live.com") ||
+		shExpMatch(host, "shellprod.msocdn.com") ||
+		shExpMatch(host, "sharepointonline.com") ||
+		shExpMatch(host, "sharepoint.com") ||
+		shExpMatch(host, "share.microsoft.com") ||
+		shExpMatch(host, "settings.data.microsoft.com") ||
+		shExpMatch(host, "settings-win.data.microsoft.com") ||
+		shExpMatch(host, "self.events.data.microsoft.com") ||
+		shExpMatch(host, "securitycenter.windows.com") ||
+		shExpMatch(host, "securitycenter.microsoft.us") ||
+		shExpMatch(host, "security.microsoft.com") ||
+		shExpMatch(host, "secure.skypeassets.com") ||
+		shExpMatch(host, "secure.globalsign.com") ||
+		shExpMatch(host, "secure.aadcdn.microsoftonline-p.com") ||
+		shExpMatch(host, "search.production.us.trafficmanager.net") ||
+		shExpMatch(host, "search.production.emea.trafficmanager.net") ||
+		shExpMatch(host, "search.production.apac.trafficmanager.net") ||
+		shExpMatch(host, "sara.api.support.microsoft.com") ||
+		shExpMatch(host, "s-ring.msedge.net") ||
+		shExpMatch(host, "s-microsoft.com") ||
+		shExpMatch(host, "ris.api.iris.microsoft.com") ||
+		shExpMatch(host, "remotehelp.microsoft.com") ||
+		shExpMatch(host, "remoteassistanceweb.usgov.communication.azure.us") ||
+		shExpMatch(host, "remoteassistanceprodacs.communication.azure.com") ||
+		shExpMatch(host, "r.office.microsoft.com") ||
+		shExpMatch(host, "r.manage.microsoft.com") ||
+		shExpMatch(host, "r.bing.com") ||
+		shExpMatch(host, "purview.microsoft.com") ||
+		shExpMatch(host, "public-trust.com") ||
+		shExpMatch(host, "provisioningapi.microsoftonline.com") ||
+		shExpMatch(host, "protection.outlook.com") ||
+		shExpMatch(host, "protection.office.com") ||
+		shExpMatch(host, "prod.msocdn.com") ||
+		shExpMatch(host, "prod.firstpartyapps.oaspapps.com.akadns.net") ||
+		shExpMatch(host, "prod.do.dsp.mp.microsoft.com") ||
+		shExpMatch(host, "prod-azurecdn-akamai-iris.azureedge.net") ||
+		shExpMatch(host, "powerautomate.com") ||
+		shExpMatch(host, "powerapps.com") ||
+		shExpMatch(host, "portal.cloudappsecurity.com") ||
+		shExpMatch(host, "policykeyservice.dc.ad.msft.net") ||
+		shExpMatch(host, "platform.linkedin.com") ||
+		shExpMatch(host, "ping-edge.smartscreen.microsoft.com") ||
+		shExpMatch(host, "phonefactor.net") ||
+		shExpMatch(host, "phobos.itunes-apple.com.akadns.net") ||
+		shExpMatch(host, "phobos.apple.com") ||
+		shExpMatch(host, "passwordreset.microsoftonline.com") ||
+		shExpMatch(host, "partnerservices.getmicrosoftkey.com") ||
+		shExpMatch(host, "packages.microsoft.com") ||
+		shExpMatch(host, "outlookmobile.com") ||
+		shExpMatch(host, "outlookmobile-office365-tas.msedge.net") ||
+		shExpMatch(host, "outlookdiagnostics.azureedge.net") ||
+		shExpMatch(host, "outlook.office365.com") ||
+		shExpMatch(host, "outlook.office.com") ||
+		shExpMatch(host, "outlook.com") ||
+		shExpMatch(host, "outlook.cloud.microsoft") ||
+		shExpMatch(host, "otelrules.azureedge.net") ||
+		shExpMatch(host, "onmicrosoft.com") ||
+		shExpMatch(host, "online.office.com") ||
+		shExpMatch(host, "oneocsp.microsoft.com") ||
+		shExpMatch(host, "onenote.com") ||
+		shExpMatch(host, "onedrive.live.com") ||
+		shExpMatch(host, "oneclient.sfx.ms") ||
+		shExpMatch(host, "onboardingpckgsusmvprd.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "onboardingpckgsusgvprd.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "onboardingpackagescusprd.blob.core.windows.net") ||
+		shExpMatch(host, "oms.opinsights.azure.us") ||
+		shExpMatch(host, "oms.opinsights.azure.com") ||
+		shExpMatch(host, "omniroot.com") ||
+		shExpMatch(host, "officespeech.platform.bing.com") ||
+		shExpMatch(host, "officeredir.microsoft.com") ||
+		shExpMatch(host, "officepreviewredir.microsoft.com") ||
+		shExpMatch(host, "officehomeblobs.blob.core.windows.net") ||
+		shExpMatch(host, "officeclient.microsoft.com") ||
+		shExpMatch(host, "officecdn.microsoft.com.edgesuite.net") ||
+		shExpMatch(host, "officecdn.microsoft.com") ||
+		shExpMatch(host, "officecdn-microsoft-com.akamaized.net") ||
+		shExpMatch(host, "officeapps.live.com") ||
+		shExpMatch(host, "office365.com") ||
+		shExpMatch(host, "office15client.microsoft.com") ||
+		shExpMatch(host, "office.net") ||
+		shExpMatch(host, "office.live.com") ||
+		shExpMatch(host, "office.com") ||
+		shExpMatch(host, "offcatedge.azureedge.net") ||
+		shExpMatch(host, "ods.opinsights.azure.us") ||
+		shExpMatch(host, "ods.opinsights.azure.com") ||
+		shExpMatch(host, "odc.officeapps.live.com") ||
+		shExpMatch(host, "ocspx.digicert.com") ||
+		shExpMatch(host, "ocsp2.globalsign.com") ||
+		shExpMatch(host, "ocsp.msocsp.com") ||
+		shExpMatch(host, "ocsp.globalsign.com") ||
+		shExpMatch(host, "ocsp.digicert.com") ||
+		shExpMatch(host, "ocsp.apple.com") ||
+		shExpMatch(host, "ocos-office365-s2s.msedge.net") ||
+		shExpMatch(host, "o365weve.com") ||
+		shExpMatch(host, "o365diagtelemetry.trafficmanager.net") ||
+		shExpMatch(host, "o15.officeredir.microsoft.com") ||
+		shExpMatch(host, "ntservicepack.microsoft.com") ||
+		shExpMatch(host, "ntp.msn.com") ||
+		shExpMatch(host, "notify.windows.com") ||
+		shExpMatch(host, "nexus.microsoftonline-p.com") ||
+		shExpMatch(host, "nav-edge.smartscreen.microsoft.com") ||
+		shExpMatch(host, "naprodimedatasec.azureedge.net") ||
+		shExpMatch(host, "naprodimedatapri.azureedge.net") ||
+		shExpMatch(host, "naprodimedatahotfix.azureedge.net") ||
+		shExpMatch(host, "mzstatic.com") ||
+		shExpMatch(host, "mx.microsoft") ||
+		shExpMatch(host, "msocdn.com") ||
+		shExpMatch(host, "msidentity.com") ||
+		shExpMatch(host, "msftidentity.com") ||
+		shExpMatch(host, "msftauthimages.net") ||
+		shExpMatch(host, "msftauth.net") ||
+		shExpMatch(host, "msedge.api.cdp.microsoft.com") ||
+		shExpMatch(host, "msecnd.net") ||
+		shExpMatch(host, "msdn.microsoft.com") ||
+		shExpMatch(host, "mscrl.microsoft.com") ||
+		shExpMatch(host, "msauthimages.net") ||
+		shExpMatch(host, "msauth.net") ||
+		shExpMatch(host, "monitor.azure.com") ||
+		shExpMatch(host, "mlccdnprod.azureedge.net") ||
+		shExpMatch(host, "mlccdn.blob.core.windows.net") ||
+		shExpMatch(host, "microsoftusercontent.com") ||
+		shExpMatch(host, "microsoftonline.com") ||
+		shExpMatch(host, "microsoftonline-p.com") ||
+		shExpMatch(host, "microsoft.com") ||
+		shExpMatch(host, "mem.gfx.ms") ||
+		shExpMatch(host, "maps.windows.com") ||
+		shExpMatch(host, "management.core.windows.net") ||
+		shExpMatch(host, "management.azure.com") ||
+		shExpMatch(host, "manage.microsoft.com") ||
+		shExpMatch(host, "manage.devcenter.microsoft.com") ||
+		shExpMatch(host, "mail.protection.outlook.com") ||
+		shExpMatch(host, "lync.com") ||
+		shExpMatch(host, "loginex.microsoftonline.com") ||
+		shExpMatch(host, "logincert.microsoftonline.com") ||
+		shExpMatch(host, "logincdn.msauth.net") ||
+		shExpMatch(host, "login.windows.net") ||
+		shExpMatch(host, "login.windows-ppe.net") ||
+		shExpMatch(host, "login.microsoftonline.us") ||
+		shExpMatch(host, "login.microsoftonline.com") ||
+		shExpMatch(host, "login.microsoftonline-p.com") ||
+		shExpMatch(host, "login.microsoft.com") ||
+		shExpMatch(host, "login.live.com, aadcdn.msauth.net") ||
+		shExpMatch(host, "login.live.com") ||
+		shExpMatch(host, "login-us.microsoftonline.com") ||
+		shExpMatch(host, "livetileedge.dsx.mp.microsoft.com") ||
+		shExpMatch(host, "live.com") ||
+		shExpMatch(host, "licensing.mp.microsoft.com") ||
+		shExpMatch(host, "lgmsapeweu.blob.core.windows.net") ||
+		shExpMatch(host, "keydelivery.mediaservices.windows.net") ||
+		shExpMatch(host, "itunes.apple.com") ||
+		shExpMatch(host, "isrg.trustid.ocsp.identrust.com") ||
+		shExpMatch(host, "ipv6.msftconnecttest.com") ||
+		shExpMatch(host, "intunemaape9.neu.attest.azure.net") ||
+		shExpMatch(host, "intunemaape8.neu.attest.azure.net") ||
+		shExpMatch(host, "intunemaape7.neu.attest.azure.net") ||
+		shExpMatch(host, "intunemaape5.scus.attest.azure.net") ||
+		shExpMatch(host, "intunemaape4.wus.attest.azure.net") ||
+		shExpMatch(host, "intunemaape3.cus.attest.azure.net") ||
+		shExpMatch(host, "intunemaape2.eus2.attest.azure.net") ||
+		shExpMatch(host, "intunemaape19.jpe.attest.azure.net") ||
+		shExpMatch(host, "intunemaape18.jpe.attest.azure.net") ||
+		shExpMatch(host, "intunemaape17.jpe.attest.azure.net") ||
+		shExpMatch(host, "intunemaape13.jpe.attest.azure.net") ||
+		shExpMatch(host, "intunemaape12.weu.attest.azure.net") ||
+		shExpMatch(host, "intunemaape11.weu.attest.azure.net") ||
+		shExpMatch(host, "intunemaape10.weu.attest.azure.net") ||
+		shExpMatch(host, "intunemaape1.eus.attest.azure.net") ||
+		shExpMatch(host, "intunecdnpeasd.azureedge.net") ||
+		shExpMatch(host, "informationprotection.hosting.portal.azure.net") ||
+		shExpMatch(host, "informationprotection.azure.com") ||
+		shExpMatch(host, "inference.location.live.net") ||
+		shExpMatch(host, "img-s-msn-com.akamaized.net") ||
+		shExpMatch(host, "img-prod-cms-rt-microsoft-com.akamaized.net") ||
+		shExpMatch(host, "iecvlist.microsoft.com") ||
+		shExpMatch(host, "I-ring.msedge.net") ||
+		shExpMatch(host, "hip.live.com") ||
+		shExpMatch(host, "graph.windows.net") ||
+		shExpMatch(host, "graph.microsoft.com") ||
+		shExpMatch(host, "gov.teams.microsoft.us") ||
+		shExpMatch(host, "go.microsoft.com") ||
+		shExpMatch(host, "geotrust.com") ||
+		shExpMatch(host, "gcc.securitycenter.microsoft.us") ||
+		shExpMatch(host, "g.live.com") ||
+		shExpMatch(host, "functional.events.data.microsoft.com") ||
+		shExpMatch(host, "ftpm.amd.com") ||
+		shExpMatch(host, "fs.microsoft.com") ||
+		shExpMatch(host, "fp.msedge.net") ||
+		shExpMatch(host, "fp-afd-nocache-ccp.azureedge.net") ||
+		shExpMatch(host, "flow.microsoft.com") ||
+		shExpMatch(host, "firstpartyapps.oaspapps.com") ||
+		shExpMatch(host, "fe3cr.delivery.mp.microsoft.com") ||
+		shExpMatch(host, "fd.api.iris.microsoft.com") ||
+		shExpMatch(host, "evoke-windowsservices-tas.msedge.net") ||
+		shExpMatch(host, "events.data.microsoft.com") ||
+		shExpMatch(host, "eus-www.sway-extensions.com") ||
+		shExpMatch(host, "eus-www.sway-cdn.com") ||
+		shExpMatch(host, "europe.x.cp.wd.microsoft.com") ||
+		shExpMatch(host, "euprodimedatasec.azureedge.net") ||
+		shExpMatch(host, "euprodimedatapri.azureedge.net") ||
+		shExpMatch(host, "euprodimedatahotfix.azureedge.net") ||
+		shExpMatch(host, "eu.vortex-win.data.microsoft.com") ||
+		shExpMatch(host, "eu-v20.events.data.microsoft.com") ||
+		shExpMatch(host, "entrust.net") ||
+		shExpMatch(host, "enterpriseregistration.windows.net") ||
+		shExpMatch(host, "endpoint.security.microsoft.com") ||
+		shExpMatch(host, "emdl.ws.microsoft.com") ||
+		shExpMatch(host, "ekop.intel.com") ||
+		shExpMatch(host, "ekcert.spserv.microsoft.com") ||
+		shExpMatch(host, "edgeassetservice.azureedge.net") ||
+		shExpMatch(host, "edge.skype.com") ||
+		shExpMatch(host, "edge.microsoft.com") ||
+		shExpMatch(host, "ecs.office.com") ||
+		shExpMatch(host, "ecs.nel.measure.office.net") ||
+		shExpMatch(host, "ecs.communication.microsoft.com") ||
+		shExpMatch(host, "ecn.dev.virtualearth.net") ||
+		shExpMatch(host, "ecn-us.dev.virtualearth.net") ||
+		shExpMatch(host, "dual-s-ring.msedge.net") ||
+		shExpMatch(host, "download.windowsupdate.com") ||
+		shExpMatch(host, "download.microsoft.com") ||
+		shExpMatch(host, "docs.microsoft.com") ||
+		shExpMatch(host, "docs.live.net") ||
+		shExpMatch(host, "do.dsp.mp.microsoft.com") ||
+		shExpMatch(host, "dmd.metaservices.microsoft.com") ||
+		shExpMatch(host, "dm3p.wns.windows.com") ||
+		shExpMatch(host, "dm.microsoft.com") ||
+		shExpMatch(host, "dlassets-ssl.xboxlive.com") ||
+		shExpMatch(host, "dl.delivery.mp.microsoft.com") ||
+		shExpMatch(host, "dgps.support.microsoft.com") ||
+		shExpMatch(host, "device.login.microsoftonline.com") ||
+		shExpMatch(host, "dev.virtualearth.net") ||
+		shExpMatch(host, "dev.azure.com") ||
+		shExpMatch(host, "delivery.mp.microsoft.com") ||
+		shExpMatch(host, "definitionupdates.microsoft.com") ||
+		shExpMatch(host, "defender.microsoft.com") ||
+		shExpMatch(host, "dc.services.visualstudio.com") ||
+		shExpMatch(host, "dataimport.dev.azure.com") ||
+		shExpMatch(host, "data-edge.smartscreen.microsoft.com") ||
+		shExpMatch(host, "da.xboxservices.com") ||
+		shExpMatch(host, "d.docs.live.net") ||
+		shExpMatch(host, "ctldl.windowsupdate.com") ||
+		shExpMatch(host, "crl4.digicert.com") ||
+		shExpMatch(host, "crl3.digicert.com") ||
+		shExpMatch(host, "crl.microsoft.com") ||
+		shExpMatch(host, "crl.identrust.com") ||
+		shExpMatch(host, "crl.globalsign.net") ||
+		shExpMatch(host, "crl.globalsign.com") ||
+		shExpMatch(host, "creativecdn.com") ||
+		shExpMatch(host, "cortana.ai") ||
+		shExpMatch(host, "config.teams.microsoft.com") ||
+		shExpMatch(host, "config.edge.skype.com") ||
+		shExpMatch(host, "compliance.microsoft.com") ||
+		shExpMatch(host, "compass-ssl.microsoft.com") ||
+		shExpMatch(host, "companymanager.microsoftonline.com") ||
+		shExpMatch(host, "cloudcheckenabler.azurewebsites.net") ||
+		shExpMatch(host, "cloudappsecurity.com") ||
+		shExpMatch(host, "cloud.microsoft") ||
+		shExpMatch(host, "clientconfig.passport.net") ||
+		shExpMatch(host, "clientconfig.microsoftonline-p.net") ||
+		shExpMatch(host, "client.wns.windows.com") ||
+		shExpMatch(host, "checkappexec.microsoft.com") ||
+		shExpMatch(host, "cert.int-x3.letsencrypt.org") ||
+		shExpMatch(host, "cdn.x.cp.wd.microsoft.com") ||
+		shExpMatch(host, "cdn.vsassets.io") ||
+		shExpMatch(host, "cdn.uci.officeapps.live.com") ||
+		shExpMatch(host, "cdn.onenote.net") ||
+		shExpMatch(host, "cdn.odc.officeapps.live.com") ||
+		shExpMatch(host, "ccs.login.microsoftonline.com") ||
+		shExpMatch(host, "cacerts.digicert.com") ||
+		shExpMatch(host, "c1.microsoft.com") ||
+		shExpMatch(host, "c.msn.com") ||
+		shExpMatch(host, "c.live.com") ||
+		shExpMatch(host, "c.bing.net") ||
+		shExpMatch(host, "c.bing.com") ||
+		shExpMatch(host, "c-ring.msedge.net") ||
+		shExpMatch(host, "business.bing.com") ||
+		shExpMatch(host, "browser.events.data.msn.com") ||
+		shExpMatch(host, "blobs.officehome.msocdn.com") ||
+		shExpMatch(host, "blob.core.windows.net") ||
+		shExpMatch(host, "blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "becws.microsoftonline.com") ||
+		shExpMatch(host, "azurewebsites.net") ||
+		shExpMatch(host, "azurerms.com") ||
+		shExpMatch(host, "azurecomcdn.azureedge.net") ||
+		shExpMatch(host, "azure.microsoft.com") ||
+		shExpMatch(host, "azure-apim.net") ||
+		shExpMatch(host, "ax.itunes.apple.com.edgesuite.net") ||
+		shExpMatch(host, "autoupdate.msappproxy.net") ||
+		shExpMatch(host, "automatedirstrprdweu3.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrprdweu.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrprdukw.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrprduks.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrprdneu3.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrprdneu.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrprdeus3.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrprdeus.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrprdcus3.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrprdcus.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrprdaus.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrprdaue.blob.core.windows.net") ||
+		shExpMatch(host, "automatedirstrfmusmv.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "automatedirstrfmusmt.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "automatedirstrffusgv.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "automatedirstrffusgt.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "autologon.microsoftazuread-sso.com") ||
+		shExpMatch(host, "autodiscover.outlook.com") ||
+		shExpMatch(host, "autodiscover-s.outlook.com") ||
+		shExpMatch(host, "auth.microsoft.com") ||
+		shExpMatch(host, "auth.gfx.ms") ||
+		shExpMatch(host, "australia.x.cp.wd.microsoft.com") ||
+		shExpMatch(host, "au.vortex-win.data.microsoft.com") ||
+		shExpMatch(host, "au-v20.events.data.microsoft.com") ||
+		shExpMatch(host, "assets.onestore.ms") ||
+		shExpMatch(host, "assets.msn.com") ||
+		shExpMatch(host, "assets-yammer.com") ||
+		shExpMatch(host, "ase-jobruntimedata-prod-su1.azure-automation.net") ||
+		shExpMatch(host, "ase-agentservice-prod-1.azure-automation.net") ||
+		shExpMatch(host, "aria.microsoft.com") ||
+		shExpMatch(host, "arc.msn.com") ||
+		shExpMatch(host, "appsforoffice.microsoft.com") ||
+		shExpMatch(host, "apps.identrust.com") ||
+		shExpMatch(host, "approdimedatasec.azureedge.net") ||
+		shExpMatch(host, "approdimedatapri.azureedge.net") ||
+		shExpMatch(host, "approdimedatahotfix.azureedge.net") ||
+		shExpMatch(host, "appex.bing.com") ||
+		shExpMatch(host, "appex-rf.msn.com") ||
+		shExpMatch(host, "app.vssps.visualstudio.com") ||
+		shExpMatch(host, "app.vssps.dev.azure.com") ||
+		shExpMatch(host, "apis.live.net") ||
+		shExpMatch(host, "apibasic.diagnostics.office.com") ||
+		shExpMatch(host, "api.passwordreset.microsoftonline.com") ||
+		shExpMatch(host, "api.msn.com") ||
+		shExpMatch(host, "api.flightproxy.skype.com") ||
+		shExpMatch(host, "api.diagnostics.office.com") ||
+		shExpMatch(host, "amp.azure.net") ||
+		shExpMatch(host, "amcdn.msftauth.net") ||
+		shExpMatch(host, "aka.ms") ||
+		shExpMatch(host, "ajax.aspnetcdn.com") ||
+		shExpMatch(host, "aexprodea1.vsaex.visualstudio.com") ||
+		shExpMatch(host, "aex.dev.azure.com") ||
+		shExpMatch(host, "ae-jobruntimedata-prod-su1.azure-automation.net") ||
+		shExpMatch(host, "ae-agentservice-prod-1.azure-automation.net") ||
+		shExpMatch(host, "adminwebservice.microsoftonline.com") ||
+		shExpMatch(host, "admin.onedrive.com") ||
+		shExpMatch(host, "admin.microsoft.com") ||
+		shExpMatch(host, "adl.windows.com") ||
+		shExpMatch(host, "adaproddiscovery.azureedge.net") ||
+		shExpMatch(host, "activity.windows.com") ||
+		shExpMatch(host, "activation.sls.microsoft.com") ||
+		shExpMatch(host, "activation-v2.sls.microsoft.com") ||
+		shExpMatch(host, "acompli.net") ||
+		shExpMatch(host, "accounts.accesscontrol.windows.net") ||
+		shExpMatch(host, "account.live.com") ||
+		shExpMatch(host, "account.activedirectory.windowsazure.com") ||
+		shExpMatch(host, "ac-jobruntimedata-prod-su1.azure-automation.net") ||
+		shExpMatch(host, "ac-agentservice-prod-1.azure-automation.net") ||
+		shExpMatch(host, "aadrm.com") ||
+		shExpMatch(host, "aadcdn.msftauth.net") ||
+		shExpMatch(host, "aadcdn.msauth.net") ||
+		shExpMatch(host, "a-ring-fallback.msedge.net") ||
+		shExpMatch(host, "5-courier.push.apple.com") ||
+		shExpMatch(host, "*.yammerusercontent.com") ||
+		shExpMatch(host, "*.yammer.com") ||
+		shExpMatch(host, "*.wns.windows.com") ||
+		shExpMatch(host, "*.windowsupdate.microsoft.com") ||
+		shExpMatch(host, "*.windowsupdate.com") ||
+		shExpMatch(host, "*.windows.net") ||
+		shExpMatch(host, "*.webpubsub.azure.com") ||
+		shExpMatch(host, "*.wdcp.microsoft.com") ||
+		shExpMatch(host, "*.wd.microsoft.com") ||
+		shExpMatch(host, "*.vstmr.visualstudio.com") ||
+		shExpMatch(host, "*.vssps.visualstudio.com") ||
+		shExpMatch(host, "*.vsblob.visualstudio.com") ||
+		shExpMatch(host, "*.vsassetscdn.azure.cn") ||
+		shExpMatch(host, "*.vsassets.io") ||
+		shExpMatch(host, "*.vortex-win.data.microsoft.com") ||
+		shExpMatch(host, "*.visualstudio.com") ||
+		shExpMatch(host, "*.virtualearth.net") ||
+		shExpMatch(host, "*.verisign.net") ||
+		shExpMatch(host, "*.verisign.com") ||
+		shExpMatch(host, "*.users.storage.live.com") ||
+		shExpMatch(host, "*.usercontent.microsoft") ||
+		shExpMatch(host, "*.us3.saml.cas.ms") ||
+		shExpMatch(host, "*.us3.portal.cloudappsecurity.com") ||
+		shExpMatch(host, "*.us2.saml.cas.ms") ||
+		shExpMatch(host, "*.us2.portal.cloudappsecurity.com") ||
+		shExpMatch(host, "*.us.saml.cas.ms") ||
+		shExpMatch(host, "*.us.portal.cloudappsecurity.com") ||
+		shExpMatch(host, "*.urs.microsoft.com") ||
+		shExpMatch(host, "*.update.microsoft.com") ||
+		shExpMatch(host, "*.trouter.teams.microsoft.com") ||
+		shExpMatch(host, "*.trouter.skype.com") ||
+		shExpMatch(host, "*.trouter.communication.microsoft.com") ||
+		shExpMatch(host, "*.teams.microsoft.com") ||
+		shExpMatch(host, "*.symcd.com") ||
+		shExpMatch(host, "*.symcb.com") ||
+		shExpMatch(host, "*.svc.ms") ||
+		shExpMatch(host, "*.support.services.microsoft.com") ||
+		shExpMatch(host, "*.streaming.mediaservices.windows.net") ||
+		shExpMatch(host, "*.static.microsoft") ||
+		shExpMatch(host, "*.smartscreen.microsoft.com") ||
+		shExpMatch(host, "*.smartscreen-prod.microsoft.com") ||
+		shExpMatch(host, "*.skype.com") ||
+		shExpMatch(host, "*.sharepointonline.com") ||
+		shExpMatch(host, "*.sharepoint.com") ||
+		shExpMatch(host, "*.servicebus.windows.net") ||
+		shExpMatch(host, "*.securitycenter.windows.com") ||
+		shExpMatch(host, "*.securitycenter.microsoft.us") ||
+		shExpMatch(host, "*.security.microsoft.com") ||
+		shExpMatch(host, "*.secure.skypeassets.com") ||
+		shExpMatch(host, "*.search.production.us.trafficmanager.net") ||
+		shExpMatch(host, "*.search.production.emea.trafficmanager.net") ||
+		shExpMatch(host, "*.search.production.apac.trafficmanager.net") ||
+		shExpMatch(host, "*.s-microsoft.com") ||
+		shExpMatch(host, "*.public-trust.com") ||
+		shExpMatch(host, "*.protection.outlook.com") ||
+		shExpMatch(host, "*.protection.office.com") ||
+		shExpMatch(host, "*.prod.do.dsp.mp.microsoft.com") ||
+		shExpMatch(host, "*.powerbi.com") ||
+		shExpMatch(host, "*.powerautomate.com") ||
+		shExpMatch(host, "*.powerapps.com") ||
+		shExpMatch(host, "*.portal.cloudappsecurity.com") ||
+		shExpMatch(host, "*.pipe.aria.microsoft.com") ||
+		shExpMatch(host, "*.phonefactor.net") ||
+		shExpMatch(host, "*.phobos.apple.com") ||
+		shExpMatch(host, "*.outlookmobile.com") ||
+		shExpMatch(host, "*.outlook.com") ||
+		shExpMatch(host, "*.onmicrosoft.com") ||
+		shExpMatch(host, "*.online.office.com") ||
+		shExpMatch(host, "*.onenote.com") ||
+		shExpMatch(host, "*.oms.opinsights.azure.us") ||
+		shExpMatch(host, "*.oms.opinsights.azure.com") ||
+		shExpMatch(host, "*.omniroot.com") ||
+		shExpMatch(host, "*.officeapps.live.com") ||
+		shExpMatch(host, "*.office365.com") ||
+		shExpMatch(host, "*.office.net") ||
+		shExpMatch(host, "*.office.com") ||
+		shExpMatch(host, "*.ods.opinsights.azure.us") ||
+		shExpMatch(host, "*.ods.opinsights.azure.com") ||
+		shExpMatch(host, "*.o365weve.com") ||
+		shExpMatch(host, "*.nuget.org") ||
+		shExpMatch(host, "*.notify.windows.com") ||
+		shExpMatch(host, "*.mzstatic.com") ||
+		shExpMatch(host, "*.mx.microsoft") ||
+		shExpMatch(host, "*.msocdn.com") ||
+		shExpMatch(host, "*.msidentity.com") ||
+		shExpMatch(host, "*.msftidentity.com") ||
+		shExpMatch(host, "*.msftauthimages.net") ||
+		shExpMatch(host, "*.msftauth.net") ||
+		shExpMatch(host, "*.msecnd.net") ||
+		shExpMatch(host, "*.msauthimages.net") ||
+		shExpMatch(host, "*.msauth.net") ||
+		shExpMatch(host, "*.msappproxy.net") ||
+		shExpMatch(host, "*.monitor.azure.com") ||
+		shExpMatch(host, "*.microsoftusercontent.com") ||
+		shExpMatch(host, "*.microsoftonline.com") ||
+		shExpMatch(host, "*.microsoftonline-p.com") ||
+		shExpMatch(host, "*.microsoft.com") ||
+		shExpMatch(host, "*.mcas.ms") ||
+		shExpMatch(host, "*.manage.microsoft.com") ||
+		shExpMatch(host, "*.mail.protection.outlook.com") ||
+		shExpMatch(host, "*.lync.com") ||
+		shExpMatch(host, "*.login.windows.net") ||
+		shExpMatch(host, "*.keydelivery.mediaservices.windows.net") ||
+		shExpMatch(host, "*.itunes.apple.com") ||
+		shExpMatch(host, "*.informationprotection.azure.com") ||
+		shExpMatch(host, "*.hip.live.com") ||
+		shExpMatch(host, "*.gov.teams.microsoft.us") ||
+		shExpMatch(host, "*.geotrust.com") ||
+		shExpMatch(host, "*.gcc.securitycenter.microsoft.us") ||
+		shExpMatch(host, "*.gallerycdn.azure.cn") ||
+		shExpMatch(host, "*.flow.microsoft.com") ||
+		shExpMatch(host, "*.events.data.microsoft.com") ||
+		shExpMatch(host, "*.eu2.saml.cas.ms") ||
+		shExpMatch(host, "*.eu2.portal.cloudappsecurity.com") ||
+		shExpMatch(host, "*.eu.saml.cas.ms") ||
+		shExpMatch(host, "*.eu.portal.cloudappsecurity.com") ||
+		shExpMatch(host, "*.entrust.net") ||
+		shExpMatch(host, "*.endpoint.security.microsoft.com") ||
+		shExpMatch(host, "*.emdl.ws.microsoft.com") ||
+		shExpMatch(host, "*.ecs.office.com") ||
+		shExpMatch(host, "*.download.windowsupdate.com") ||
+		shExpMatch(host, "*.download.microsoft.com") ||
+		shExpMatch(host, "*.do.dsp.mp.microsoft.com") ||
+		shExpMatch(host, "*.dm.microsoft.com") ||
+		shExpMatch(host, "*.dl.delivery.mp.microsoft.com") ||
+		shExpMatch(host, "*.dfs.fabric.microsoft.com") ||
+		shExpMatch(host, "*.dev.azure.com") ||
+		shExpMatch(host, "*.delivery.mp.microsoft.com") ||
+		shExpMatch(host, "*.dedup.microsoft.com") ||
+		shExpMatch(host, "*.cortana.ai") ||
+		shExpMatch(host, "*.core.windows.net") ||
+		shExpMatch(host, "*.compliance.microsoft.com") ||
+		shExpMatch(host, "*.cloudappsecurity.com") ||
+		shExpMatch(host, "*.cloud.microsoft") ||
+		shExpMatch(host, "*.checkappexec.microsoft.com") ||
+		shExpMatch(host, "*.cas.ms") ||
+		shExpMatch(host, "*.blob.core.windows.net") ||
+		shExpMatch(host, "*.blob.core.usgovcloudapi.net") ||
+		shExpMatch(host, "*.azurerms.com") ||
+		shExpMatch(host, "*.azure-automation.net") ||
+		shExpMatch(host, "*.azure-apim.net") ||
+		shExpMatch(host, "*.auth.microsoft.com") ||
+		shExpMatch(host, "*.assets-yammer.com") ||
+		shExpMatch(host, "*.aria.microsoft.com") ||
+		shExpMatch(host, "*.appex.bing.com") ||
+		shExpMatch(host, "*.appex-rf.msn.com") ||
+		shExpMatch(host, "*.analysis.windows.net") ||
+		shExpMatch(host, "*.admin-mcas.ms") ||
+		shExpMatch(host, "*.adhybridhealth.azure.com") ||
+		shExpMatch(host, "*.activity.windows.com") ||
+		shExpMatch(host, "*.acompli.net") ||
+		shExpMatch(host, "*.access.mcas.ms") ||
+		shExpMatch(host, "*.aadrm.com") ||
+		shExpMatch(host, "*.aadconnecthealth.azure.com")
+	) 
+	{
+		return "DIRECT"; // Bypass proxy for domains
+	}
+
+	if 
+	(
+		isInNet(resolved_ip, "13.107.6.171", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.107.18.15", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.107.140.6", "255.255.255.255") ||
+		isInNet(resolved_ip, "52.108.0.0", "255.252.0.0") ||
+		isInNet(resolved_ip, "52.244.37.168", "255.255.255.255") ||
+		isInNet(resolved_ip, "20.20.32.0", "255.255.224.0") ||
+		isInNet(resolved_ip, "20.190.128.0", "255.255.192.0") ||
+		isInNet(resolved_ip, "20.231.128.0", "255.255.224.0") ||
+		isInNet(resolved_ip, "40.126.0.0", "255.255.192.0") ||
+		isInNet(resolved_ip, "13.107.6.192", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.107.9.192", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.107.6.152", "255.255.255.254") ||
+		isInNet(resolved_ip, "13.107.18.10", "255.255.255.254") ||
+		isInNet(resolved_ip, "13.107.128.0", "255.255.252.0") ||
+		isInNet(resolved_ip, "23.103.160.0", "255.255.240.0") ||
+		isInNet(resolved_ip, "40.96.0.0", "255.248.0.0") ||
+		isInNet(resolved_ip, "40.104.0.0", "255.254.0.0") ||
+		isInNet(resolved_ip, "52.96.0.0", "255.252.0.0") ||
+		isInNet(resolved_ip, "131.253.33.215", "255.255.255.255") ||
+		isInNet(resolved_ip, "132.245.0.0", "255.255.0.0") ||
+		isInNet(resolved_ip, "150.171.32.0", "255.255.252.0") ||
+		isInNet(resolved_ip, "204.79.197.215", "255.255.255.255") ||
+		isInNet(resolved_ip, "40.92.0.0", "255.254.0.0") ||
+		isInNet(resolved_ip, "40.107.0.0", "255.255.0.0") ||
+		isInNet(resolved_ip, "52.100.0.0", "255.252.0.0") ||
+		isInNet(resolved_ip, "52.238.78.88", "255.255.255.255") ||
+		isInNet(resolved_ip, "104.47.0.0", "255.255.128.0") ||
+		isInNet(resolved_ip, "52.96.0.0", "255.248.0.0") ||
+		isInNet(resolved_ip, "13.107.136.0", "255.255.252.0") ||
+		isInNet(resolved_ip, "40.108.128.0", "255.255.128.0") ||
+		isInNet(resolved_ip, "52.104.0.0", "255.252.0.0") ||
+		isInNet(resolved_ip, "104.146.128.0", "255.255.128.0") ||
+		isInNet(resolved_ip, "150.171.40.0", "255.255.252.0") ||
+		isInNet(resolved_ip, "52.104.0.0", "255.248.0.0") ||
+		isInNet(resolved_ip, "52.112.0.0", "255.252.0.0") ||
+		isInNet(resolved_ip, "52.122.0.0", "255.254.0.0") ||
+		isInNet(resolved_ip, "52.238.119.141", "255.255.255.255") ||
+		isInNet(resolved_ip, "52.244.160.207", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.67.13.176", "255.255.255.240") ||
+		isInNet(resolved_ip, "13.67.15.128", "255.255.255.224") ||
+		isInNet(resolved_ip, "13.69.67.224", "255.255.255.240") ||
+		isInNet(resolved_ip, "13.69.231.128", "255.255.255.240") ||
+		isInNet(resolved_ip, "13.70.78.128", "255.255.255.240") ||
+		isInNet(resolved_ip, "13.70.79.128", "255.255.255.224") ||
+		isInNet(resolved_ip, "13.71.199.64", "255.255.255.240") ||
+		isInNet(resolved_ip, "13.73.244.48", "255.255.255.240") ||
+		isInNet(resolved_ip, "13.74.111.192", "255.255.255.224") ||
+		isInNet(resolved_ip, "13.77.53.176", "255.255.255.240") ||
+		isInNet(resolved_ip, "13.86.221.176", "255.255.255.240") ||
+		isInNet(resolved_ip, "13.89.174.240", "255.255.255.240") ||
+		isInNet(resolved_ip, "13.89.175.192", "255.255.255.240") ||
+		isInNet(resolved_ip, "20.37.153.0", "255.255.255.0") ||
+		isInNet(resolved_ip, "20.37.192.128", "255.255.255.128") ||
+		isInNet(resolved_ip, "20.38.81.0", "255.255.255.0") ||
+		isInNet(resolved_ip, "20.41.1.0", "255.255.255.0") ||
+		isInNet(resolved_ip, "20.42.1.0", "255.255.255.0") ||
+		isInNet(resolved_ip, "20.42.130.0", "255.255.255.0") ||
+		isInNet(resolved_ip, "20.42.224.128", "255.255.255.128") ||
+		isInNet(resolved_ip, "20.43.129.0", "255.255.255.0") ||
+		isInNet(resolved_ip, "20.44.19.224", "255.255.255.224") ||
+		isInNet(resolved_ip, "20.49.93.160", "255.255.255.224") ||
+		isInNet(resolved_ip, "20.189.172.160", "255.255.255.224") ||
+		isInNet(resolved_ip, "20.189.229.0", "255.255.255.128") ||
+		isInNet(resolved_ip, "20.191.167.0", "255.255.255.128") ||
+		isInNet(resolved_ip, "20.192.159.40", "255.255.255.248") ||
+		isInNet(resolved_ip, "20.192.174.216", "255.255.255.248") ||
+		isInNet(resolved_ip, "20.204.193.10", "255.255.255.254") ||
+		isInNet(resolved_ip, "20.204.193.12", "255.255.255.252") ||
+		isInNet(resolved_ip, "40.67.121.224", "255.255.255.224") ||
+		isInNet(resolved_ip, "40.70.151.32", "255.255.255.240") ||
+		isInNet(resolved_ip, "40.71.14.96", "255.255.255.240") ||
+		isInNet(resolved_ip, "40.74.25.0", "255.255.255.0") ||
+		isInNet(resolved_ip, "40.78.245.240", "255.255.255.240") ||
+		isInNet(resolved_ip, "40.78.247.128", "255.255.255.224") ||
+		isInNet(resolved_ip, "40.79.197.64", "255.255.255.224") ||
+		isInNet(resolved_ip, "40.79.197.96", "255.255.255.240") ||
+		isInNet(resolved_ip, "40.80.180.208", "255.255.255.240") ||
+		isInNet(resolved_ip, "40.80.180.224", "255.255.255.224") ||
+		isInNet(resolved_ip, "40.80.184.128", "255.255.255.128") ||
+		isInNet(resolved_ip, "40.82.248.224", "255.255.255.240") ||
+		isInNet(resolved_ip, "40.82.249.128", "255.255.255.128") ||
+		isInNet(resolved_ip, "40.119.8.128", "255.255.255.128") ||
+		isInNet(resolved_ip, "52.150.137.0", "255.255.255.128") ||
+		isInNet(resolved_ip, "52.162.111.96", "255.255.255.240") ||
+		isInNet(resolved_ip, "52.168.116.128", "255.255.255.224") ||
+		isInNet(resolved_ip, "52.182.141.192", "255.255.255.224") ||
+		isInNet(resolved_ip, "52.236.189.96", "255.255.255.224") ||
+		isInNet(resolved_ip, "52.240.244.160", "255.255.255.224") ||
+		isInNet(resolved_ip, "104.46.162.96", "255.255.255.224") ||
+		isInNet(resolved_ip, "13.107.6.0", "255.255.255.0") ||
+		isInNet(resolved_ip, "13.107.9.0", "255.255.255.0") ||
+		isInNet(resolved_ip, "13.107.42.0", "255.255.255.0") ||
+		isInNet(resolved_ip, "13.107.43.0", "255.255.255.0") ||
+		isInNet(resolved_ip, "13.107.9.198", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.107.6.198", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.107.6.181", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.107.9.181", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.64.26.88", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.64.29.32", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.80.125.22", "255.255.255.255") ||
+		isInNet(resolved_ip, "13.91.91.243", "255.255.255.255") ||
+		isInNet(resolved_ip, "40.74.1.235", "255.255.255.255") ||
+		isInNet(resolved_ip, "40.74.6.204", "255.255.255.255") ||
+		isInNet(resolved_ip, "51.143.58.207", "255.255.255.255") ||
+		isInNet(resolved_ip, "52.137.89.147", "255.255.255.255") ||
+		isInNet(resolved_ip, "52.183.75.62", "255.255.255.255") ||
+		isInNet(resolved_ip, "23.101.201.123", "255.255.255.255") ||
+		isInNet(resolved_ip, "20.228.186.154", "255.255.255.255") ||
+		isInNet(resolved_ip, "20.36.222.59", "255.255.255.255") ||
+		isInNet(resolved_ip, "20.36.222.60", "255.255.255.255") ||
+		isInNet(resolved_ip, "52.184.165.82", "255.255.255.255") ||
+		isInNet(resolved_ip, "20.15.114.156", "255.255.255.255") ||
+		isInNet(resolved_ip, "172.202.90.196", "255.255.255.255") ||
+		isInNet(resolved_ip, "40.90.218.196", "255.255.255.255") ||
+		isInNet(resolved_ip, "40.90.218.198", "255.255.255.255") ||
+		isInNet(resolved_ip, "20.3.226.231", "255.255.255.255") ||
+		isInNet(resolved_ip, "4.255.218.227", "255.255.255.255")
+	)
+ 	{
+		return "DIRECT"; // Bypass proxy for IP ranges or addresses
+	}
+
+    return proxy;
+}
+
