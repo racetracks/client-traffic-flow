@@ -28,6 +28,11 @@ Function Invoke-ProxyBuilder {
             ArchivePath         = "$($pwd.Path)\Archive"
         })
 
+        # declare proxy.pac/wpad.dat output file path
+
+        $script:wpadfile = "$($Script:Directories.WPADOutputDir)\wpad.dat"
+
+
         # I have no idea why, but microsoft has these domains in their url filters.  
         # *microsoft.com is potentially something that could be used maliciously if a firewall allowed it (maliciousmicrosoft.com would pass the filter in this example)
         # i've yet to see a next gen firewall or a proxy honor a * that wasnt immediately followed by a subdomain
@@ -100,8 +105,10 @@ Function Invoke-ProxyBuilder {
         #Create Directories if not exist
         foreach($Directory in $Script:Directories.psobject.Properties)
         {
+
             if(-not(Test-Path -Path $Directory.value))
             {
+                $Directory.value
                 New-Item -ItemType Directory -Path $Directory.value | Out-Null
             }
         }
@@ -188,11 +195,79 @@ Function Invoke-ProxyBuilder {
 
         $script:domains_distinct = $domains | Select-Object -Unique | Sort-Object -Descending
         $script:ipv4address_distinct = $script:ipv4address | Select-Object -Unique
+
+        #region beginning section of pac builder
+
+        New-Item -Path $script:wpadfile -ItemType File -Force | Out-Null
+
+        #region wpad static first line
+        #$script:wpad:1 = 'function FindProxyForURL(url, host) {'
+
+        $script:wpad:1 = @"
+function FindProxyForURL(url, host) {
+
+"@
+        #endregion
+
+        #region declare proxy
+        $script:wpad:2 = @"
+    // declare proxy server
+    var ProxyServer = `"PROXY ${ProxyServerAddress}:${ProxyServerPort}`";
+
+"@
+
+        #endregion
+
+        $script:wpad:3 = @"
+    // set current clients ip address to variable myip
+    var myip = myIpAddress();
+
+    // create variable "proxy"
+    var proxy;
+
+"@
+        $script:wpad:4 = @"
+    // set proxy to proxyserver
+    proxy = ProxyServer;
+        
+"@
+
+        $script:wpad:5 = @"
+    
+    if (isPlainHostName(host) || // bypass proxy if non fqdn
+        isInNet(myip, "127.0.0.0", "255.0.0.0") ||      // bypass proxy if localhost network
+        isInNet(myip, "10.0.0.0", "255.0.0.0") ||       // bypass proxy if private subnet 10.0.0.0/8
+        isInNet(myip, "172.16.0.0", "255.240.0.0") ||   // bypass proxy if Private subnet 172.16.0.0/12
+        isInNet(myip, "192.168.0.0", "255.255.0.0"))    // bypass proxy if Private subnet 192.168.0.0/16
+    {
+        return "DIRECT"; // Bypass proxy for plain hostnames, loopback, and private subnets
+    }
+
+"@
+
+
+        $script:wpad:finalize = @"
+    return proxy;
+}
+
+"@
+        #build wpad.dat
+
+        #region outputwpad
+        $script:wpad:1 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        $script:wpad:2 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        $script:wpad:3 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        $script:wpad:4 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        $script:wpad:5 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+
+        $script:wpad:finalize | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        #endregion
+
+
     }
 
     end 
     {
-        $script:domains_distinct
     }
 
 }
