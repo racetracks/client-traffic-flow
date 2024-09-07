@@ -11,7 +11,9 @@ Function Invoke-ProxyBuilder {
         [Parameter(Mandatory = $false, Position = 0)]
         [string]$ProxyServerAddress,
         [Parameter(Mandatory = $false, Position = 1)]
-        [string]$ProxyServerPort
+        [string]$ProxyServerPort,
+        [Parameter(Mandatory = $false, Position = 2)]
+        [string]$LocalDNSDomains
     )
 
     begin {
@@ -227,7 +229,7 @@ function FindProxyForURL(url, host) {
         #endregion
 
         #region declare proxy
-        $script:wpad:2 = @"
+        $script:wpad:5 = @"
     // declare proxy server
     var ProxyServer = `"PROXY ${ProxyServerAddress}:${ProxyServerPort}`";
 
@@ -235,7 +237,7 @@ function FindProxyForURL(url, host) {
 
         #endregion
 
-        $script:wpad:3 = @"
+        $script:wpad:10 = @"
     // set current clients ip address to variable myip
     var myip = myIpAddress();
 
@@ -243,7 +245,7 @@ function FindProxyForURL(url, host) {
     var proxy;
 
 "@
-        $script:wpad:4 = @"
+        $script:wpad:15 = @"
     // set proxy to proxyserver
     proxy = ProxyServer;
     
@@ -251,7 +253,7 @@ function FindProxyForURL(url, host) {
         
 "@
 
-        $script:wpad:5 = @"
+        $script:wpad:20 = @"
     
     if (isPlainHostName(host) || // bypass proxy if non fqdn
         isInNet(host, "127.0.0.0", "255.0.0.0") ||      // bypass proxy if localhost network
@@ -263,21 +265,21 @@ function FindProxyForURL(url, host) {
     }
 
 "@
-# Initialize the WPAD content variable
-$script:wpad:6 = "`tif `n`t(" # Start of the if block
+        # Initialize the WPAD content variable
+        $script:wpad:30 = "`tif `n`t(" # Start of the if block
 
         foreach ($domain in $script:domains_distinct) {
-            $script:wpad:6 += "`n`t`tshExpMatch(host, `"$domain`") ||" # Add each condition on a new line with tab indentation
+            $script:wpad:30 += "`n`t`tshExpMatch(host, `"$domain`") ||" # Add each condition on a new line with tab indentation
         }
 
         # Remove the last ' || ' and add the final condition
-        $script:wpad:6 = $script:wpad:6.TrimEnd(" ||")
-        $script:wpad:6 += "`n`t) `n`t{`n"
-        $script:wpad:6 += "`t`treturn `"DIRECT`"`; // Bypass proxy for domains`n" # Add a tab indent for the return statement
-        $script:wpad:6 += "`t}`n" # Closing brace on its own line
+        $script:wpad:30 = $script:wpad:6.TrimEnd(" ||")
+        $script:wpad:30 += "`n`t) `n`t{`n"
+        $script:wpad:30 += "`t`treturn `"DIRECT`"`; // Bypass proxy for domains`n" # Add a tab indent for the return statement
+        $script:wpad:30 += "`t}`n" # Closing brace on its own line
 
 
-        $script:wpad:7 = "`tif `n`t(" # Start of the if block
+        $script:wpad:40 = "`tif `n`t(" # Start of the if block
 
         foreach ($ipRange in $script:ipv4address_distinct) {
             if ($ipRange -match "^(\d+\.\d+\.\d+\.\d+)/(\d+)$") {
@@ -291,18 +293,18 @@ $script:wpad:6 = "`tif `n`t(" # Start of the if block
                 $mask = Convert-CIDRToNetmask -cidr $ipRange
             }
 
-            $script:wpad:7 += "`n`t`tisInNet(host, `"$ip`", `"$mask`") ||" # Add each condition on a new line with tab indentation
+            $script:wpad:40 += "`n`t`tisInNet(host, `"$ip`", `"$mask`") ||" # Add each condition on a new line with tab indentation
         }
 
         # Remove the last ' || ' and add the final condition
-        $script:wpad:7 = $script:wpad:7.TrimEnd(" ||")
-        $script:wpad:7 += "`n`t)`n"
-        $script:wpad:7 += " `t{`n"
-        $script:wpad:7 += "`t`treturn `"DIRECT`"`; // Bypass proxy for IP ranges or addresses`n" # Add a tab indent for the return statement
+        $script:wpad:40 = $script:wpad:7.TrimEnd(" ||")
+        $script:wpad:40 += "`n`t)`n"
+        $script:wpad:40 += " `t{`n"
+        $script:wpad:40 += "`t`treturn `"DIRECT`"`; // Bypass proxy for IP ranges or addresses`n" # Add a tab indent for the return statement
 
         # Output the WPAD content
 
-        $script:wpad:7 += "`t}`n"
+        $script:wpad:40 += "`t}`n"
 
 
         $script:wpad:finalize = @"
@@ -314,10 +316,10 @@ $script:wpad:6 = "`tif `n`t(" # Start of the if block
 
         #region outputwpad
         $script:wpad:1 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
-        $script:wpad:2 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
-        $script:wpad:3 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
-        $script:wpad:4 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
         $script:wpad:5 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        $script:wpad:10 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        $script:wpad:15 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
+        $script:wpad:20 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
         $script:wpad:6 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
         $script:wpad:7 | Out-File -Path $script:wpadfile -Encoding utf8 -Append -Force
 
