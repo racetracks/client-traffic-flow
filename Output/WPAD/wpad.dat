@@ -347,6 +347,7 @@ function FindProxyForURL(url, host) {
 		shExpMatch(host, "intunemaape9.neu.attest.azure.net") ||
 		shExpMatch(host, "intunemaape8.neu.attest.azure.net") ||
 		shExpMatch(host, "intunemaape7.neu.attest.azure.net") ||
+		shExpMatch(host, "intunemaape6.ncus.attest.azure.net") ||
 		shExpMatch(host, "intunemaape5.scus.attest.azure.net") ||
 		shExpMatch(host, "intunemaape4.wus.attest.azure.net") ||
 		shExpMatch(host, "intunemaape3.cus.attest.azure.net") ||

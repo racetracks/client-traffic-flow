@@ -1,0 +1,3 @@
+graph.windows.net
+*.manage.microsoft.com
+*.events.data.microsoft.com

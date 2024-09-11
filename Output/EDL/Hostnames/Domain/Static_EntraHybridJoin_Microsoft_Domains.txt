@@ -1,0 +1,4 @@
+enterpriseregistration.windows.net
+login.microsoftonline.com
+device.login.microsoftonline.com
+autologon.microsoftazuread-sso.com

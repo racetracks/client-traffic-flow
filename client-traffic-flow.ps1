@@ -39,12 +39,13 @@ Function Invoke-ProxyBuilder {
         
         # Declare Folder Variables
         $Script:Directories = [PSCustomObject]([ordered]@{
-            StaticInputDir      = "$($pwd.Path)\Inputs"
-            OutputRoot          = "$($pwd.Path)\Output"
-            EDLipv4OutputDir    = "$($pwd.Path)\Output\EDL\ipv4"
-            EDLdomainOutputDir  = "$($pwd.Path)\Output\EDL\domain"
-            WPADOutputDir       = "$($pwd.Path)\Output\WPAD"
-            ArchivePath         = "$($pwd.Path)\Archive"
+            StaticInputDir                  =   "$($pwd.Path)\Inputs"
+            OutputRoot                      =   "$($pwd.Path)\Output"
+            Hostname_EDL_Domain_OutputDir   =   "$($pwd.Path)\Output\EDL\Hostnames\Domain"
+            PA_EDL_Domain_OutputDir         =   "$($pwd.Path)\Output\EDL\PA\domain"
+            PA_EDL_IP_OutputDir             =   "$($pwd.Path)\Output\EDL\PA\ipv4"
+            WPADOutputDir                   =   "$($pwd.Path)\Output\WPAD"
+            ArchivePath                     =   "$($pwd.Path)\Archive"
         })
 
         # declare proxy.pac/wpad.dat output file path
@@ -128,7 +129,6 @@ Function Invoke-ProxyBuilder {
 
             if(-not(Test-Path -Path $Directory.value))
             {
-                $Directory.value
                 New-Item -ItemType Directory -Path $Directory.value | Out-Null
             }
         }
@@ -147,12 +147,12 @@ Function Invoke-ProxyBuilder {
         foreach($list in $Script:IPs.psobject.Properties)
         {
 
-            if(-not(Test-Path ($Script:Directories.EDLipv4OutputDir + "\" + $list.Name + ".txt")))
+            if(-not(Test-Path ($Script:Directories.PA_EDL_IP_OutputDir + "\" + $list.Name + ".txt")))
             {
-                New-Item -ItemType File -Path ($Script:Directories.EDLipv4OutputDir + "\" + $list.Name + ".txt") -Force | Out-Null
-                Add-Content -Path ($Script:Directories.EDLipv4OutputDir + "\" + $list.Name + ".txt") -Value ""
+                New-Item -ItemType File -Path ($Script:Directories.PA_EDL_IP_OutputDir + "\" + $list.Name + ".txt") -Force | Out-Null
+                Add-Content -Path ($Script:Directories.PA_EDL_IP_OutputDir + "\" + $list.Name + ".txt") -Value "" -Encoding utf8 -Force
             }
-            $list.value | Out-File -FilePath ($Script:Directories.EDLipv4OutputDir + "\" + $list.Name + ".txt") -Encoding utf8 -Force -Append
+            $list.value | Out-File -FilePath ($Script:Directories.PA_EDL_IP_OutputDir + "\" + $list.Name + ".txt") -Encoding utf8 -Force -Append
         }
 
         #dedup duplicate ips and store in variable for wpad building later
@@ -190,16 +190,30 @@ Function Invoke-ProxyBuilder {
                 # Trim white space entries 
                 $domain = $domain.Trim()
 
-                # only report on domains with a value not "" and write them to the edl
+                # only report on domains with a value not "" and write them to the PA edl
                 if($domain -ne "")
                 {
-                    if(-not(Test-Path ($Script:Directories.EDLdomainOutputDir + "\" + $EDLListName + ".txt")))
+                    if(-not(Test-Path ($Script:Directories.PA_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt")))
                     {
-                        New-Item -ItemType File -Path ($Script:Directories.EDLdomainOutputDir + "\" + $EDLListName + ".txt") -Force | Out-Null
-                        Add-Content -Path ($Script:Directories.EDLdomainOutputDir + "\" + $EDLListName + ".txt") -Value ""
+                        New-Item -ItemType File -Path ($Script:Directories.PA_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt") -Force | Out-Null
+                        Add-Content -Path ($Script:Directories.PA_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt") -Value "" -Encoding utf8
                     }
                     
-                    Add-Content -Path ($Script:Directories.EDLdomainOutputDir + "\" + $EDLListName + ".txt") -Value ($domain + "/")
+                    Add-Content -Path ($Script:Directories.PA_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt") -Value ($domain + "/")
+                }
+
+                # Output hostnames to static hostname EDL
+                if($domain -ne "")
+                {
+                    # Hostname_EDL_Domain_OutputDir
+                    if(-not(Test-Path ($Script:Directories.Hostname_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt")))
+                    {
+                        New-Item -ItemType File -Path ($Script:Directories.Hostname_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt") -Force | Out-Null
+                    }
+
+                    Add-Content -Path ($Script:Directories.Hostname_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt") -Value ($domain)
+
+                    
                 }
 
                 # output domain to store in variable to structure wpad
