@@ -199,7 +199,7 @@ Function Invoke-ProxyBuilder {
                         Add-Content -Path ($Script:Directories.PA_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt") -Value "" -Encoding utf8
                     }
                     
-                    Add-Content -Path ($Script:Directories.PA_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt") -Value ($domain + "/")
+                    Add-Content -Path ($Script:Directories.PA_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt") -Value ($domain + "/") -Encoding utf8
                 }
 
                 # Output hostnames to static hostname EDL
@@ -211,7 +211,7 @@ Function Invoke-ProxyBuilder {
                         New-Item -ItemType File -Path ($Script:Directories.Hostname_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt") -Force | Out-Null
                     }
 
-                    Add-Content -Path ($Script:Directories.Hostname_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt") -Value ($domain)
+                    Add-Content -Path ($Script:Directories.Hostname_EDL_Domain_OutputDir + "\" + $EDLListName + ".txt") -Value ($domain) -Encoding utf8
 
                     
                 }
